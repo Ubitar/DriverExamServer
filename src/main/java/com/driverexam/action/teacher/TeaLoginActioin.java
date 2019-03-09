@@ -17,7 +17,10 @@ public class TeaLoginActioin {
     TeaRepository teaRepository;
 
     @PostMapping("/login")
-    public Object login(@RequestParam String account, @RequestParam String password) {
+    public Object login(
+            @RequestParam String account,
+            @RequestParam String password
+    ) {
         BaseResponse baseResponse = new BaseResponse();
         TeacherEntry teacherEntry = teaRepository.findByAccountAndPassword(account, password);
         if (teacherEntry == null) {
@@ -26,10 +29,6 @@ public class TeaLoginActioin {
         } else {
             teacherEntry.setToken(UUID.randomUUID().toString());
             teacherEntry = teaRepository.save(teacherEntry);
-
-            teacherEntry.setAccount(null);
-            teacherEntry.setPassword(null);
-
             baseResponse.setData(teacherEntry);
             baseResponse.setMsg("登陆成功");
         }

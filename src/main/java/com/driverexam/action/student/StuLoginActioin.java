@@ -65,14 +65,16 @@ public class StuLoginActioin {
     @PostMapping("/register")
     public Object register(
             @RequestParam String account,
-            @RequestParam String password
+            @RequestParam String password,
+            @RequestParam String password2
     ) {
         BaseResponse baseResponse = new BaseResponse();
 
-        if (StringUtils.isEmpty(account) || StringUtils.isEmpty(password)) {
-            baseResponse.setCode(0);
-            baseResponse.setMsg("账号密码不能为空");
-            return baseResponse;
+        if (StringUtils.isEmpty(account) || StringUtils.isEmpty(password) || StringUtils.isEmpty(password2)) {
+            return new BaseResponse("账号密码不能为空", 0);
+        }
+        if (!password.equals(password2)) {
+            return new BaseResponse("两次输入的密码不相同", 0);
         }
 
         StudentEntry studentEntry = stuRepository.findByAccountAndPassword(account, password);
